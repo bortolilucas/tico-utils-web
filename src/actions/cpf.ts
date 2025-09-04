@@ -19,8 +19,6 @@ export const generateCpfAction = defineAction({
       hasPunctuation: punctuation === YesOrNoAnswer.YES,
     });
 
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
     return { cpf, formData: { punctuation, state } };
   },
 });

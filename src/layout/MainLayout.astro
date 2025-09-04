@@ -6,6 +6,12 @@ import { ClientRouter } from "astro:transitions";
 
 import Navbar from "@/layout/components/Navbar.astro";
 import Header from "@/layout/components/Header.astro";
+
+type Props = {
+  enableClientRouter?: boolean;
+};
+
+const { enableClientRouter } = Astro.props;
 ---
 
 <html lang="en">
@@ -18,7 +24,7 @@ import Header from "@/layout/components/Header.astro";
 
     <Font cssVariable="--font-inter" preload />
 
-    <ClientRouter />
+    {enableClientRouter && <ClientRouter />}
   </head>
   <body class="bg-gray-50 min-h-svh flex text-gray-800">
     <Navbar />
