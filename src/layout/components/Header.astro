@@ -1,0 +1,22 @@
+---
+import Input from "@/components/Input.astro";
+
+const searchParams = Astro.url.searchParams;
+const search = searchParams.get("search");
+---
+
+<header
+  class="bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center"
+>
+  <div></div>
+
+  <form method="GET" action="/pesquisa">
+    <Input
+      name="search"
+      class="min-w-80"
+      placeholder="Pesquisar..."
+      type="search"
+      value={search}
+    />
+  </form>
+</header>

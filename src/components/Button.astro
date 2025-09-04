@@ -1,0 +1,47 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import Spinner from "@/assets/icons/spinner.svg";
+
+type Variant = "listItem" | "primary";
+
+type Props = HTMLAttributes<"button"> &
+  HTMLAttributes<"a"> & {
+    isActive?: boolean;
+    variant?: Variant;
+  };
+
+let {
+  href,
+  isActive,
+  class: className,
+  variant = "primary",
+  type = "button",
+  ...rest
+} = Astro.props;
+
+const Tag = href ? "a" : "button";
+---
+
+<Tag
+  {...rest}
+  data-active={isActive}
+  href={href}
+  type={type}
+  class:list={[
+    "flex gap-3 items-center group relative cursor-pointer focus:outline-none [&>svg]:w-7 text-sm font-medium rounded-lg",
+    {
+      listItem:
+        "text-gray-700 py-2 px-4 hover:bg-gray-100 data-[active=true]:bg-indigo-50 data-[active=true]:text-indigo-600",
+      primary:
+        "bg-indigo-600 justify-center py-2 px-4 text-white text-center hover:bg-indigo-700 data-[active=true]:bg-indigo-700 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500",
+    }[variant],
+    className,
+  ]}
+>
+  <slot />
+  {
+    type === "submit" && (
+      <Spinner class="hidden !w-5 animate-spin [form.loading_&]:block" />
+    )
+  }
+</Tag>

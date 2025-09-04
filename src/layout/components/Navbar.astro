@@ -1,0 +1,52 @@
+---
+import AccountIcon from "@/assets/icons/account.svg";
+import BadgeIcon from "@/assets/icons/badge.svg";
+import BusinessIcon from "@/assets/icons/business.svg";
+import CallIcon from "@/assets/icons/call.svg";
+import DocsIcon from "@/assets/icons/docs.svg";
+import PersonIcon from "@/assets/icons/person.svg";
+import Button from "@/components/Button.astro";
+
+type NavbarItem = {
+  title: string;
+  href: string;
+  Icon: ((_props: astroHTML.JSX.SVGAttributes) => any) & ImageMetadata;
+};
+
+const navItems: NavbarItem[] = [
+  { title: "Gerador de CPF", href: "/gerador-de-cpf", Icon: BadgeIcon },
+  { title: "Gerador de CNPJ", href: "/gerador-de-cnpj", Icon: BusinessIcon },
+  { title: "Gerador de Celular", href: "/gerador-de-celular", Icon: CallIcon },
+  { title: "Gerador de Nome", href: "/gerador-de-nome", Icon: PersonIcon },
+  { title: "Gerador de CNH", href: "/gerador-de-cnh", Icon: DocsIcon },
+  {
+    title: "Gerador de Conta Bancária",
+    href: "/gerador-conta-bancaria",
+    Icon: AccountIcon,
+  },
+];
+
+const { pathname } = Astro.url;
+---
+
+<aside class="w-64 bg-white border-r border-gray-200 flex flex-col">
+  <a class="p-8" href="/">
+    <h1 class="text-2xl font-bold text-gray-900">Toolbox</h1>
+    <h2 class="text-sm text-gray-500">Online Development Tools</h2>
+  </a>
+
+  <nav class="flex-1 px-4 py-2 space-y-1">
+    {
+      navItems.map((item) => (
+        <Button
+          href={item.href}
+          variant="listItem"
+          isActive={pathname.startsWith(item.href)}
+        >
+          <item.Icon />
+          {item.title}
+        </Button>
+      ))
+    }
+  </nav>
+</aside>

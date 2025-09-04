@@ -1,0 +1,35 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+import SearchIcon from "@/assets/icons/search.svg";
+
+type InputType = "text" | "search";
+
+type Props = HTMLAttributes<"input"> & {
+  type?: InputType;
+};
+
+let { type = "text", class: className, ...inputProps } = Astro.props;
+
+const inputTypeMap: Record<InputType, astroHTML.JSX.HTMLInputTypeAttribute> = {
+  text: "text",
+  search: "text",
+};
+---
+
+<div class="relative">
+  <input
+    {...inputProps}
+    type={inputTypeMap[type]}
+    class:list={[
+      "pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500",
+      type === "search" ? "pl-12" : "pl-4",
+      className,
+    ]}
+  />
+  {
+    type === "search" && (
+      <SearchIcon class="absolute w-7 left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+    )
+  }
+</div>
