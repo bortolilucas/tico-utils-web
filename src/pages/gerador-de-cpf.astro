@@ -1,16 +1,16 @@
 ---
 import { actions } from "astro:actions";
 
+import ContentCopyIcon from "@/assets/icons/copy.svg";
+import GenerateIcon from "@/assets/icons/generate.svg";
 import Button from "@/components/Button.astro";
 import Card from "@/components/Card.astro";
+import ErrorMessage from "@/components/ErrorMessage.astro";
 import Select from "@/components/Select.astro";
 import SelectOptions from "@/components/SelectOptions.astro";
-import GenerateIcon from "@/assets/icons/generate.svg";
 import { ufOptions, yesOrNoOptions } from "@/data/selectOptions.ts";
 import MainLayout from "@/layout/MainLayout.astro";
-import { isInputError } from "astro:actions";
-import { isActionError } from "astro:actions";
-import ErrorMessage from "@/components/ErrorMessage.astro";
+import { isActionError, isInputError } from "astro:actions";
 
 export const prerender = false;
 
@@ -64,9 +64,38 @@ const actionError = isActionError(result?.error) ? result.error.message : null;
 
     {
       result?.data?.cpf && (
-        <div class="mt-8 p-4 bg-green-50 border border-green-200 rounded-lg">
-          <h3 class="text-xl font-semibold text-green-800 mb-2">CPF Gerado</h3>
-          <p class="text-green-900 text-lg">{result.data.cpf}</p>
+        <div class="grid grid-cols-1 max-w-4xl mt-8 md:grid-cols-2 gap-8">
+          <div>
+            <label
+              class="block text-sm font-medium text-gray-700 mb-2"
+              for="generated-cpf"
+            >
+              Generated CPF
+            </label>
+            <div class="relative">
+              <p
+                class="w-full bg-gray-100 border-gray-300 rounded-lg py-3 px-4 text-gray-800 text-lg"
+                id="generated-cpf"
+              >
+                {result.data.cpf}
+              </p>
+              <button
+                type="button"
+                id="copyButton"
+                class="absolute group cursor-pointer right-2 top-1/2 -translate-y-1/2 p-2 text-gray-500 hover:text-gray-700"
+              >
+                <ContentCopyIcon class="w-6" />
+              </button>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-center">
+            <img
+              alt="Advertisement for personalized email"
+              class="rounded-lg"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjJwj1qw_3liK2YaUYpNoh3n5oFkl6PnoSVdJ7qu0c7DRkbQowEjWRs4cHPpG0cwOAYHovaaaBIV7qzxPTKJLHeecmkId04FW5OYNx-yCR1NhgLCH7xXQJthEn78sB8qKy3O6w9pku-xwmoAFJ_CtS5xqflGiNnRWiT1hoNlV9d1acoZR-oPvCxZ26UrO9vb4Lo7-HszIBepkZlacNv-zifqSHFwcgJK3sdQhCf-x8_jsctPFJenl6TIM3vx5oxvQfiCK8CY_ma8k"
+            />
+          </div>
         </div>
       )
     }
@@ -74,7 +103,16 @@ const actionError = isActionError(result?.error) ? result.error.message : null;
 </MainLayout>
 
 <script>
+  import { copyToClipboard } from "@/utils/clipboard";
   import { handleFormSubmit } from "@/utils/forms";
 
-  handleFormSubmit("generateCpfForm");
+  document.addEventListener("astro:page-load", () => {
+    handleFormSubmit("generateCpfForm");
+    copyToClipboard(
+      document.getElementById("generated-cpf")!.textContent,
+      document.getElementById("copyButton")!,
+      "CPF copiado!",
+      "Clique para copiar"
+    );
+  });
 </script>
